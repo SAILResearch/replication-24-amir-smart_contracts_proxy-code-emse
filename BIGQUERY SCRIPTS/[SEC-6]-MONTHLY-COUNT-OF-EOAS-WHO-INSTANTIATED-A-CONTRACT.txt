@@ -1,0 +1,43 @@
+CREATE TABLE
+  `plated-life-373816.storage.df-monthly-dist-of-EOAs` AS (
+  SELECT
+    year,
+    month,
+    COUNT(DISTINCT deployer_address) as deployer_count
+  FROM (
+    SELECT
+      T0.to_address,
+      T1.from_address AS deployer_address,
+      EXTRACT(YEAR
+      FROM
+        block_timestamp) AS year,
+      EXTRACT(MONTH
+      FROM
+        block_timestamp) AS month
+    FROM (
+      SELECT
+        *
+      FROM
+        `bigquery-public-data.crypto_ethereum.traces`
+      WHERE
+        trace_type = 'create') AS T0
+    LEFT JOIN (
+      SELECT
+        transaction_hash,
+        from_address
+      FROM
+        `bigquery-public-data.crypto_ethereum.traces`
+      WHERE
+        trace_address IS NULL
+        OR trace_address LIKE '') AS T1
+    ON
+      T0.transaction_hash = T1.transaction_hash
+    WHERE
+      T0.block_timestamp < TIMESTAMP('2022-09-01')
+      AND T0.status != 0)
+  GROUP BY
+    year,
+    month
+  ORDER BY
+    year,
+    month ASC )

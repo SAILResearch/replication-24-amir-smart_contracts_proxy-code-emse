@@ -1,0 +1,20 @@
+CREATE TABLE
+  `ascendant-woods-398116.storage.df-proxy-inbound-txs-count2` AS (
+  SELECT
+    c.from_address,
+    count (DISTINCT transaction_hash) AS inbound_txs_count
+  FROM
+    `bigquery-public-data.crypto_ethereum.traces` AS traces
+  LEFT JOIN (
+    SELECT
+      DISTINCT from_address
+    FROM
+      `ascendant-woods-398116.storage.df-proxies-logics`) AS c
+  ON
+    traces.to_address = c.from_address
+  WHERE
+    traces.status != 0
+    AND traces.block_timestamp < TIMESTAMP('2022-09-01')
+    AND c.from_address IS NOT NULL
+  GROUP BY
+    c.from_address )

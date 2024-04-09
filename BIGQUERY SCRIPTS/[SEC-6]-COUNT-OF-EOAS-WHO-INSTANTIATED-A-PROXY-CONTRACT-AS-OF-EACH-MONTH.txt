@@ -1,0 +1,60 @@
+DECLARE sd DATE DEFAULT '2015-08-01';
+
+CREATE TABLE
+  `local-now-379916.storage.df-number-of-unique-EOAs-associated-to-proxies-asof-given-month-X` AS (
+  SELECT
+    start_date,
+    end_date,
+    COUNT(DISTINCT deployer_address) AS number_of_eoas_asof
+  FROM (
+    SELECT
+      T0.to_address,
+      T1.from_address AS deployer_address,
+      EXTRACT(YEAR
+      FROM
+        block_timestamp) AS year,
+      EXTRACT(MONTH
+      FROM
+        block_timestamp) AS month,
+      block_timestamp
+    FROM (
+      SELECT
+        *
+      FROM
+        `bigquery-public-data.crypto_ethereum.traces`
+      WHERE
+        trace_type = 'create'
+        AND block_timestamp < TIMESTAMP('2022-09-01')
+        AND to_address IN (
+        SELECT
+          from_address
+        FROM
+          `local-now-379916.storage.df-unique-proxies-by-address`) ) AS T0
+    LEFT JOIN (
+      SELECT
+        transaction_hash,
+        from_address
+      FROM
+        `bigquery-public-data.crypto_ethereum.traces`
+      WHERE
+        trace_address IS NULL
+        OR trace_address LIKE '') AS T1
+    ON
+      T0.transaction_hash = T1.transaction_hash
+    WHERE
+      T0.block_timestamp < TIMESTAMP('2022-09-01') )
+  INNER JOIN (
+    SELECT
+      CAST(start_date AS TIMESTAMP) start_date,
+      CAST(end_date AS TIMESTAMP) end_date
+    FROM
+      `local-now-379916.storage.dates3`)
+  ON
+    DATE_TRUNC(block_timestamp, DAY) BETWEEN start_date
+    AND end_date
+  GROUP BY
+    start_date,
+    end_date
+  ORDER BY
+    end_Date
+  )

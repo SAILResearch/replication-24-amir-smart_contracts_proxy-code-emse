@@ -1,0 +1,46 @@
+CREATE TABLE
+  `cosmic-gizmo-386418.storage.df-monthly-dist-of-multicall-txs-ca-ca2` AS (
+  SELECT
+    month,
+    year,
+    COUNT(DISTINCT transaction_hash) AS transaction_count
+  FROM (
+    SELECT
+      DISTINCT L.transaction_hash,
+      L.month,
+      L.year,
+      R.from_address,
+      R.to_address
+    FROM (
+      SELECT
+        DISTINCT transaction_hash,
+        EXTRACT(MONTH
+        FROM
+          block_timestamp) AS month,
+        EXTRACT(YEAR
+        FROM
+          block_timestamp) AS year
+      FROM
+        `bigquery-public-data.crypto_ethereum.traces` ) AS L
+    LEFT JOIN
+      `bigquery-public-data.crypto_ethereum.traces` AS R
+    ON
+      L.transaction_hash = R.transaction_hash
+    WHERE
+      R.to_address IN (
+      SELECT
+        DISTINCT address
+      FROM
+        `bigquery-public-data.crypto_ethereum.contracts`)
+      AND R.from_address IN (
+      SELECT
+        DISTINCT address
+      FROM
+        `bigquery-public-data.crypto_ethereum.contracts`)
+      AND R.trace_type = 'call' )
+  GROUP BY
+    month,
+    year
+  ORDER BY
+    year,
+    month )

@@ -1,0 +1,6 @@
+SELECT
+  count (DISTINCT transaction_hash) AS counter
+FROM
+  `bigquery-public-data.crypto_ethereum.traces`
+WHERE
+  block_timestamp < TIMESTAMP('2022-09-01')

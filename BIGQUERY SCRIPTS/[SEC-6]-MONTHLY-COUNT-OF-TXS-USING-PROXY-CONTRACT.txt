@@ -1,0 +1,32 @@
+CREATE TABLE
+  `capable-epigram-363420.storage.df-monthly-count-of-txs-with-proxy` AS (
+  SELECT
+    month,
+    year,
+    COUNT(DISTINCT transaction_hash) AS txs_with_proxy_count
+  FROM (
+    SELECT
+      DISTINCT traces1.transaction_hash,
+      EXTRACT(MONTH
+      FROM
+        traces1.block_timestamp) AS month,
+      EXTRACT(YEAR
+      FROM
+        traces1.block_timestamp) AS year,
+      PL.from_address,
+      PL.to_address
+    FROM
+      `capable-epigram-363420.storage.df-proxy-logic-pairs` AS PL
+    LEFT JOIN
+      `bigquery-public-data.crypto_ethereum.traces` AS traces1
+    ON
+      PL.from_address = traces1.from_address
+      AND PL.to_address = traces1.to_address
+    WHERE
+      call_type = 'delegatecall')
+  GROUP BY
+    month,
+    year
+  ORDER BY
+    year,
+    month ASC )

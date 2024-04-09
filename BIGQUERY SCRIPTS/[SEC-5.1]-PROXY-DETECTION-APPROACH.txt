@@ -1,0 +1,53 @@
+CREATE TABLE
+  `plated-life-373816.storage.df-proxies-logics` AS (
+  SELECT
+    R.to_address AS from_address,
+    L.to_address,
+    COUNT(DISTINCT L.transaction_hash) AS counts
+  FROM (
+    SELECT
+      transaction_hash,
+      from_address,
+      to_address,
+      input,
+      trace_address,
+      REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (trace_address, "197", "ÿ"), "196", "þ"), "195", "ý"), "194", "ü"), "193", "û"), "192", "ú"), "191", "ù"), "190", "ø"), "189", "÷"), "188", "ö"), "187", "õ"), "186", "ô"), "185", "ó"), "184", "ò"), "183", "ñ"), "182", "ð"), "181", "ï"), "180", "î"), "179", "í"), "178", "ì"), "177", "ë"), "176", "ê"), "175", "é"), "174", "è"), "173", "ç"), "172", "æ"), "171", "å"), "170", "ä"), "169", "ã"), "168", "â"), "167", "á"), "166", "à"), "165", "ß"), "164", "Þ"), "163", "Ý"), "162", "Ü"), "161", "Û"), "160", "Ú"), "159", "Ù"), "158", "Ø"), "157", "×"), "156", "Ö"), "155", "Õ"), "154", "Ô"), "153", "Ó"), "152", "Ò"), "151", "Ñ"), "150", "Ð"), "149", "Ï"), "148", "Î"), "147", "Í"), "146", "Ì"), "145", "Ë"), "144", "Ê"), "143", "É"), "142", "È"), "141", "Ç"), "140", "Æ"), "139", "Å"), "138", "Ä"), "137", "Ã"), "136", "Â"), "135", "Á"), "134", "À"), "133", "¿"), "132", "¾"), "131", "½"), "130", "¼"), "129", "»"), "128", "º"), "127", "¹"), "126", "¸"), "125", "·"), "124", "¶"), "123", "µ"), "122", "´"), "121", "³"), "120", "²"), "119", "±"), "118", "°"), "117", "¯"), "116", "®"), "115", "¬­"), "114", "«"), "113", "ª"), "112", "©"), "111", "¨"), "110", "§"), "109", "¦"), "108", "¥"), "107", "¤"), "106", "£"), "105", "¢"), "104", "¡"), "103", "Ÿ"), "102", "ž"), "101", "œ"), "100", "›"), "99", "š"), "98", "™"), "97", "˜"), "96", "—"), "95", "–"), "94", "•"), "93", "”"), "92", "“"), "91", "’"), "90", "‘"), "89", "Ž"), "88", "Œ"), "87", "‹"), "86", "Š"), "85", "‰"), "84", "ˆ"), "83", "‡"), "82", "†"), "81", "„"), "80", "ƒ"), "79", "€"), "78", "~"), "77", "}"), "76", "|"), "75", "{"), "74", "z"), "73", "y"), "72", "x"), "71", "w"), "70", "v"), "69", "u"), "68", "t"), "67", "s"), "66", "r"), "65", "q"), "64", "p"), "63", "o"), "62", "n"), "61", "m"), "60", "l"), "59", "k"), "58", "j"), "57", "i"), "56", "h"), "55", "g"), "54", "f"), "53", "e"), "52", "d"), "51", "c"), "50", "b"), "49", "a"), "48", "_"), "47", "^"), "46", "]"), "45", "["), "44", "Z"), "43", "Y"), "42", "X"), "41", "W"), "40", "V"), "39", "U"), "38", "T"), "37", "S"), "36", "R"), "35", "Q"), "34", "P"), "33", "O"), "32", "N"), "31", "M"), "30", "L"), "29", "K"), "28", "J"), "27", "I"), "26", "H"), "25", "G"), "24", "F"), "23", "E"), "22", "D"), "21", "C"), "20", "B"), "19", "A"), "18", "@"), "17", "?"), "16", ">"), "15", "="), "14", "<"), "13", ";"), "12", ":"), "11", "/"), "10", "."), "9", "-"), "8", "+"), "7", "*"), "6", ")"), "5", "("), "4", "&"), "3", "%"), "2", "$"), "1", "#"), "0", "!") AS trace_address2
+    FROM
+      `bigquery-public-data.crypto_ethereum.traces`
+    WHERE
+      block_timestamp < TIMESTAMP('2022-09-01')
+      AND call_type='delegatecall'
+      AND status != 0 ) AS L
+  LEFT JOIN (
+    SELECT
+      OUTER_TRACE.input,
+      OUTER_TRACE.from_address,
+      OUTER_TRACE.to_address,
+      OUTER_TRACE.transaction_hash,
+      OUTER_TRACE.trace_address,
+      REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (REPLACE (trace_address, "197", "ÿ"), "196", "þ"), "195", "ý"), "194", "ü"), "193", "û"), "192", "ú"), "191", "ù"), "190", "ø"), "189", "÷"), "188", "ö"), "187", "õ"), "186", "ô"), "185", "ó"), "184", "ò"), "183", "ñ"), "182", "ð"), "181", "ï"), "180", "î"), "179", "í"), "178", "ì"), "177", "ë"), "176", "ê"), "175", "é"), "174", "è"), "173", "ç"), "172", "æ"), "171", "å"), "170", "ä"), "169", "ã"), "168", "â"), "167", "á"), "166", "à"), "165", "ß"), "164", "Þ"), "163", "Ý"), "162", "Ü"), "161", "Û"), "160", "Ú"), "159", "Ù"), "158", "Ø"), "157", "×"), "156", "Ö"), "155", "Õ"), "154", "Ô"), "153", "Ó"), "152", "Ò"), "151", "Ñ"), "150", "Ð"), "149", "Ï"), "148", "Î"), "147", "Í"), "146", "Ì"), "145", "Ë"), "144", "Ê"), "143", "É"), "142", "È"), "141", "Ç"), "140", "Æ"), "139", "Å"), "138", "Ä"), "137", "Ã"), "136", "Â"), "135", "Á"), "134", "À"), "133", "¿"), "132", "¾"), "131", "½"), "130", "¼"), "129", "»"), "128", "º"), "127", "¹"), "126", "¸"), "125", "·"), "124", "¶"), "123", "µ"), "122", "´"), "121", "³"), "120", "²"), "119", "±"), "118", "°"), "117", "¯"), "116", "®"), "115", "¬­"), "114", "«"), "113", "ª"), "112", "©"), "111", "¨"), "110", "§"), "109", "¦"), "108", "¥"), "107", "¤"), "106", "£"), "105", "¢"), "104", "¡"), "103", "Ÿ"), "102", "ž"), "101", "œ"), "100", "›"), "99", "š"), "98", "™"), "97", "˜"), "96", "—"), "95", "–"), "94", "•"), "93", "”"), "92", "“"), "91", "’"), "90", "‘"), "89", "Ž"), "88", "Œ"), "87", "‹"), "86", "Š"), "85", "‰"), "84", "ˆ"), "83", "‡"), "82", "†"), "81", "„"), "80", "ƒ"), "79", "€"), "78", "~"), "77", "}"), "76", "|"), "75", "{"), "74", "z"), "73", "y"), "72", "x"), "71", "w"), "70", "v"), "69", "u"), "68", "t"), "67", "s"), "66", "r"), "65", "q"), "64", "p"), "63", "o"), "62", "n"), "61", "m"), "60", "l"), "59", "k"), "58", "j"), "57", "i"), "56", "h"), "55", "g"), "54", "f"), "53", "e"), "52", "d"), "51", "c"), "50", "b"), "49", "a"), "48", "_"), "47", "^"), "46", "]"), "45", "["), "44", "Z"), "43", "Y"), "42", "X"), "41", "W"), "40", "V"), "39", "U"), "38", "T"), "37", "S"), "36", "R"), "35", "Q"), "34", "P"), "33", "O"), "32", "N"), "31", "M"), "30", "L"), "29", "K"), "28", "J"), "27", "I"), "26", "H"), "25", "G"), "24", "F"), "23", "E"), "22", "D"), "21", "C"), "20", "B"), "19", "A"), "18", "@"), "17", "?"), "16", ">"), "15", "="), "14", "<"), "13", ";"), "12", ":"), "11", "/"), "10", "."), "9", "-"), "8", "+"), "7", "*"), "6", ")"), "5", "("), "4", "&"), "3", "%"), "2", "$"), "1", "#"), "0", "!") AS trace_address2,
+    FROM
+      `bigquery-public-data.crypto_ethereum.traces` AS OUTER_TRACE
+    RIGHT JOIN (
+      SELECT
+        transaction_hash
+      FROM
+        `bigquery-public-data.crypto_ethereum.traces`
+      GROUP BY
+        transaction_hash
+      HAVING
+        MAX(subtraces) < 198) AS INNER_TRACE
+    ON
+      OUTER_TRACE.transaction_hash = INNER_TRACE.transaction_hash ) AS R
+  ON
+    L.transaction_hash = R.transaction_hash
+  WHERE
+    (R.trace_address2 < L.trace_address2
+      OR R.trace_address IS NULL)
+    AND COALESCE(R.trace_address,"root") = COALESCE(NULLIF(SUBSTRING(L.trace_address,0,CAST((ABS(LENGTH(L.trace_address)-2)+LENGTH(L.trace_address)-2)/2 AS int) ),''),"root")
+    AND SUBSTRING(L.input, 1,10) = SUBSTRING(R.input, 1,10)
+  GROUP BY
+    R.to_address,
+    L.to_address
+  ORDER BY
+    R.to_address )

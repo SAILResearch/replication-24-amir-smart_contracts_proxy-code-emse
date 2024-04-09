@@ -1,0 +1,54 @@
+SELECT
+  COUNT(DISTINCT T1.transaction_hash) AS counter
+FROM (
+  SELECT
+    transaction_hash,
+    month,
+    year,
+    COUNT(*) AS node_counts
+  FROM (
+    SELECT
+      L.transaction_hash,
+      L.month,
+      L.year,
+    FROM (
+      SELECT
+        DISTINCT transaction_hash,
+        EXTRACT(MONTH
+        FROM
+          block_timestamp) AS month,
+        EXTRACT(YEAR
+        FROM
+          block_timestamp) AS year
+      FROM
+        `bigquery-public-data.crypto_ethereum.traces` ) AS L
+    LEFT JOIN
+      `bigquery-public-data.crypto_ethereum.traces` AS R
+    ON
+      L.transaction_hash = R.transaction_hash
+    WHERE
+      R.to_address IN (
+      SELECT
+        DISTINCT address
+      FROM
+        `bigquery-public-data.crypto_ethereum.contracts`)
+      AND R.from_address IN (
+      SELECT
+        DISTINCT address
+      FROM
+        `bigquery-public-data.crypto_ethereum.contracts`)
+      AND R.trace_type = 'call' )
+  GROUP BY
+    transaction_hash,
+    month,
+    year
+  HAVING
+    node_counts >= 2 ) AS T1
+LEFT JOIN
+  `bigquery-public-data.crypto_ethereum.traces` AS T2
+ON
+  T1.transaction_hash = T2.transaction_hash
+WHERE
+  T2.trace_type = 'call'
+  AND T2.call_type = 'delegatecall'
+  AND block_timestamp < TIMESTAMP('2022-09-01')

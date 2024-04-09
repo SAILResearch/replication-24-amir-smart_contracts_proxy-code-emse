@@ -1,0 +1,23 @@
+CREATE TABLE
+  `capable-epigram-363420.storage.df-monthly-count-of-txs` AS (
+  SELECT
+    month,
+    year,
+    COUNT(distinct transaction_hash) AS txs_with_proxy_count
+  FROM (
+    SELECT
+      DISTINCT traces1.transaction_hash,
+      EXTRACT(MONTH
+      FROM
+        traces1.block_timestamp) AS month,
+      EXTRACT(YEAR
+      FROM
+        traces1.block_timestamp) AS year,
+    FROM
+      `bigquery-public-data.crypto_ethereum.traces` AS traces1 )
+  GROUP BY
+    month,
+    year
+  ORDER BY
+    year,
+    month ASC )

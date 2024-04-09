@@ -1,0 +1,60 @@
+CREATE TABLE
+  `plated-life-373816.storage.df-monthly-dist-of-multicall-txs-ca-ca-with-proxy` AS (
+  SELECT
+    month,
+    year,
+    COUNT(DISTINCT transaction_hash) AS multicall_txs_with_proxy_count
+  FROM (
+    SELECT
+      MCT.transaction_hash,
+      MCT.month,
+      MCT.year,
+      T.from_address,
+      T.to_address
+    FROM (
+      SELECT
+        transaction_hash,
+        EXTRACT(YEAR
+        FROM
+          block_timestamp) AS year,
+        EXTRACT(MONTH
+        FROM
+          block_timestamp) AS month
+      FROM (
+        SELECT
+          transaction_hash,
+          block_timestamp
+        FROM
+          `bigquery-public-data.crypto_ethereum.traces`
+        WHERE
+          to_address IN (
+          SELECT
+            DISTINCT address
+          FROM
+            `bigquery-public-data.crypto_ethereum.contracts`)
+          AND from_address IN (
+          SELECT
+            DISTINCT address
+          FROM
+            `bigquery-public-data.crypto_ethereum.contracts`)
+          AND trace_type = 'call' )
+      GROUP BY
+        transaction_hash,
+        block_timestamp
+      HAVING
+        COUNT(*) >= 2 ) AS MCT
+    LEFT JOIN
+      `bigquery-public-data.crypto_ethereum.traces` AS T
+    ON
+      T.transaction_hash = MCT.transaction_hash) AS MCT2
+  RIGHT JOIN
+    `plated-life-373816.storage.df-proxies-logics` AS PL
+  ON
+    PL.from_address = MCT2.from_address
+    AND PL.to_address = MCT2.to_address
+  GROUP BY
+    month,
+    year
+  ORDER BY
+    year,
+    month )
